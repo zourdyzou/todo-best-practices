@@ -18,7 +18,10 @@ export const TodoList = () => {
   const { searchQuery } = useUIStore();
   const { selectedUser } = useUserStore();
 
-  const { data, isLoading } = useTodos((currentPage - 1) * itemsPerPage, itemsPerPage);
+  const { data, isLoading } = useTodos(
+    (currentPage - 1) * itemsPerPage, // skip
+    itemsPerPage // limit
+  );
 
   useEffect(() => {
     if (data) {
