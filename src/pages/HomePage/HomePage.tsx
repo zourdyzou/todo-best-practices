@@ -1,16 +1,24 @@
-import { Hero } from "./Hero/Hero";
+import { TodoSearch } from "@/components/todo/TodoSearch/TodoSearch";
+import { UserSelect } from "@/components/user/UserSelect/UserSelect";
+import { TodoList } from "@/components/todo/TodoList/TodoList";
+import { TodoCreate } from "@/components/todo/TodoCreate/TodoCreate";
 
-export const HomePage = () => {
+export default function HomePage() {
   return (
-    <div
-      className="flex flex-col justify-center items-center"
-      style={{ width: "100vw", height: "100vh", background: "hotpink" }}
-    >
-      <Hero />
+    <div className="container mx-auto py-8 space-y-6">
+      <div className="flex justify-between items-center">
+        <h1 className="text-3xl font-bold">Todo List</h1>
+        <TodoCreate />
+      </div>
+      
+      <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex-1">
+          <TodoSearch />
+        </div>
+        <UserSelect />
+      </div>
 
-      <p className="text-4xl font-bold text-slate-50 p-10">
-        Random dog from an API
-      </p>
+      <TodoList />
     </div>
   );
-};
+}
