@@ -23,21 +23,16 @@ interface UserSelectFieldProps {
   hideAllOption?: boolean;
 }
 
-export const UserSelectField = ({ 
-  value, 
-  onValueChange, 
+export const UserSelectField = ({
+  value,
+  onValueChange,
   className,
-  hideAllOption = false 
+  hideAllOption = false,
 }: UserSelectFieldProps) => {
   const { ref, inView } = useInView();
-  
-  const { 
-    data, 
-    isLoading, 
-    isFetchingNextPage, 
-    hasNextPage, 
-    fetchNextPage 
-  } = useUsers(10);
+
+  const { data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage } =
+    useUsers(10);
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
@@ -45,7 +40,7 @@ export const UserSelectField = ({
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  const users = data?.pages.flatMap(page => page.users) ?? [];
+  const users = data?.pages.flatMap((page) => page.users) ?? [];
 
   if (isLoading) {
     return (
@@ -56,28 +51,20 @@ export const UserSelectField = ({
   }
 
   return (
-    <Select
-      value={value}
-      onValueChange={onValueChange}
-    >
+    <Select value={value} onValueChange={onValueChange}>
       <SelectTrigger className={cn("w-full", className)}>
         <SelectValue placeholder="Select a user" />
       </SelectTrigger>
       <SelectContent className="w-full min-w-[200px]">
-        {!hideAllOption && (
-          <SelectItem value="all">All Users</SelectItem>
-        )}
+        {!hideAllOption && <SelectItem value="all">All Users</SelectItem>}
         {users.map((user) => (
           <SelectItem key={user.id} value={user.id.toString()}>
             {user.firstName} {user.lastName}
           </SelectItem>
         ))}
-        
+
         {hasNextPage && (
-          <div 
-            ref={ref}
-            className="p-2 flex justify-center border-t"
-          >
+          <div ref={ref} className="p-2 flex justify-center border-t">
             {isFetchingNextPage ? (
               <Spinner size="sm" />
             ) : (

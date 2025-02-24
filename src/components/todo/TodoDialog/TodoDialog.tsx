@@ -19,24 +19,24 @@ interface TodoDialogProps {
   onOpenChange: (open: boolean) => void;
   onSubmit: (data: { todo: string; userId: number }) => void;
   isLoading: boolean;
-  mode: 'create' | 'edit';
+  mode: "create" | "edit";
   defaultValues?: {
     todo?: string;
     userId?: number;
   };
 }
 
-export const TodoDialog = ({ 
-  open, 
-  onOpenChange, 
+export const TodoDialog = ({
+  open,
+  onOpenChange,
   onSubmit,
   isLoading,
   mode,
-  defaultValues = {}
+  defaultValues = {},
 }: TodoDialogProps) => {
   const [todoText, setTodoText] = useState(defaultValues.todo ?? "");
   const [selectedUserId, setSelectedUserId] = useState<string>(
-    defaultValues.userId?.toString() ?? ""
+    defaultValues.userId?.toString() ?? "",
   );
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -63,7 +63,7 @@ export const TodoDialog = ({
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>
-            {mode === 'create' ? 'Create New Todo' : 'Edit Todo'}
+            {mode === "create" ? "Create New Todo" : "Edit Todo"}
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -89,18 +89,20 @@ export const TodoDialog = ({
             />
           </div>
 
-          <Button 
-            type="submit" 
-            disabled={isLoading || !selectedUserId} 
+          <Button
+            type="submit"
+            disabled={isLoading || !selectedUserId}
             className="w-full"
           >
             {isLoading ? (
               <>
                 <Spinner size="sm" className="mr-2" />
-                {mode === 'create' ? 'Creating...' : 'Updating...'}
+                {mode === "create" ? "Creating..." : "Updating..."}
               </>
+            ) : mode === "create" ? (
+              "Create Todo"
             ) : (
-              mode === 'create' ? 'Create Todo' : 'Update Todo'
+              "Update Todo"
             )}
           </Button>
         </form>

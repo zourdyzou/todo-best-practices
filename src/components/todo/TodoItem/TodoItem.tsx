@@ -24,19 +24,20 @@ interface TodoItemProps {
 }
 
 export const TodoItem = ({ todo }: TodoItemProps) => {
-  const { updateTodo: updateTodoInStore, deleteTodo: deleteTodoInStore } = useTodoStore();
+  const { updateTodo: updateTodoInStore, deleteTodo: deleteTodoInStore } =
+    useTodoStore();
   const { mutate: updateTodo, isPending: isUpdating } = useUpdateTodo();
   const { mutate: deleteTodo, isPending: isDeleting } = useDeleteTodo();
 
   const handleToggle = () => {
     updateTodo(
-      { 
-        id: todo.id, 
+      {
+        id: todo.id,
         todo: {
           todo: todo.todo,
           userId: todo.userId,
-          completed: !todo.completed
-        }
+          completed: !todo.completed,
+        },
       },
       {
         onSuccess: (updatedTodo) => {

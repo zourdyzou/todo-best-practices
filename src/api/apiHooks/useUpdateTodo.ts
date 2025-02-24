@@ -15,6 +15,6 @@ export const useUpdateTodo = () => {
       }
       // Otherwise, try the real API
       return updateTodo(id, todo);
-    }
+    },
   });
 };

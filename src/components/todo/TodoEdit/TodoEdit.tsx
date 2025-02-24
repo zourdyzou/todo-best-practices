@@ -21,11 +21,11 @@ interface TodoEditProps {
 
 export const TodoEdit = ({ todo }: TodoEditProps) => {
   const { updateTodo } = useTodoStore();
-  const { 
-    isEditModalOpen, 
-    setEditModalOpen, 
+  const {
+    isEditModalOpen,
+    setEditModalOpen,
     selectedTodoId,
-    setSelectedTodoId 
+    setSelectedTodoId,
   } = useUIStore();
 
   const { mutate: editTodo, isPending: isLoading } = useUpdateTodo();
@@ -49,8 +49,8 @@ export const TodoEdit = ({ todo }: TodoEditProps) => {
         todo: {
           todo: data.todo,
           userId: data.userId,
-          completed: todo.completed
-        }
+          completed: todo.completed,
+        },
       },
       {
         onSuccess: (updatedTodo) => {
@@ -61,7 +61,7 @@ export const TodoEdit = ({ todo }: TodoEditProps) => {
         onError: () => {
           toast.error("Failed to update todo");
         },
-      }
+      },
     );
   };
 

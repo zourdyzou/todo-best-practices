@@ -3,7 +3,7 @@ import { getUsers } from "@/api/requests/get";
 
 export const useUsers = (limit: number = 10) => {
   const query = useInfiniteQuery({
-    queryKey: ['users', limit],
+    queryKey: ["users", limit],
     queryFn: ({ pageParam = 0 }) => getUsers(pageParam, limit),
     getNextPageParam: (lastPage, allPages) => {
       const nextPage = allPages.length * limit;
@@ -14,7 +14,7 @@ export const useUsers = (limit: number = 10) => {
     gcTime: 1000 * 60 * 30, // Cache persists for 30 minutes before garbage collection
   });
 
-  const users = query.data?.pages.flatMap(page => page.users) ?? [];
+  const users = query.data?.pages.flatMap((page) => page.users) ?? [];
   const total = query.data?.pages[0]?.total ?? 0;
 
   return {

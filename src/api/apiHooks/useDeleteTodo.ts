@@ -13,6 +13,6 @@ export const useDeleteTodo = () => {
       }
       // Otherwise, try the real API
       return deleteTodo(id);
-    }
+    },
   });
 };

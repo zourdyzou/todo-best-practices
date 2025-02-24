@@ -63,6 +63,6 @@ export const useTodoStore = create<TodoState & TodoActions>((set, get) => ({
 
   setCurrentPage: (page) => set({ currentPage: page }),
   setItemsPerPage: (items) => set({ itemsPerPage: items }),
-  
+
   isLocalTodo: (id) => get().localTodoIds.has(id),
 }));
