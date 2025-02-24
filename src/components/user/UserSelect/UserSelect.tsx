@@ -37,8 +37,12 @@ export const UserSelect = () => {
 
   return (
     <Select
-      value={selectedUser?.id.toString()}
+      value={selectedUser?.id?.toString() || "all"} // Changed default value
       onValueChange={(value) => {
+        if (value === "all") {
+          setSelectedUser(null);
+          return;
+        }
         const user = users.find((u) => u.id.toString() === value);
         setSelectedUser(user || null);
       }}
@@ -47,7 +51,7 @@ export const UserSelect = () => {
         <SelectValue placeholder="Select a user" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="">All Users</SelectItem>
+        <SelectItem value="all">All Users</SelectItem> {/* Changed from empty string to "all" */}
         {users.map((user) => (
           <SelectItem key={user.id} value={user.id.toString()}>
             {user.firstName} {user.lastName}
