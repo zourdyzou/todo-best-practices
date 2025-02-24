@@ -12,7 +12,9 @@ export const TodoSearch = () => {
 
   return (
     <Input
-      startIcon={<Search />}
+      startIcon={
+        <Search className="h-4 w-4 text-muted-foreground" /> // Added size and color
+      }
       placeholder="Search todos..."
       value={searchQuery}
       onChange={(e) => setSearchQuery(e.target.value)}
