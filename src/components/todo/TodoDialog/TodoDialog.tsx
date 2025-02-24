@@ -39,7 +39,6 @@ export const TodoDialog = ({
     defaultValues.userId?.toString() ?? "",
   );
 
-  // Reset form when dialog opens/closes
   useEffect(() => {
     if (!open) {
       setTodoText("");
