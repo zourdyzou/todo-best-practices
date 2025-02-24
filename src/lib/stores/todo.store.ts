@@ -33,7 +33,7 @@ export const useTodoStore = create<TodoState & TodoActions>((set) => ({
 
   addTodo: (todo) =>
     set((state) => ({
-      todos: [...state.todos, todo],
+      todos: [todo, ...state.todos],
       totalTodos: state.totalTodos + 1,
     })),
 

@@ -22,20 +22,22 @@ import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
 
 // Stores
-import { useUserStore } from "@/lib/stores/user.store";
+import { useTodoStore } from "@/lib/stores/todo.store";
 import { useState } from "react";
+import { UserSelectField } from "@/components/user/UserSelectField/UserSelectField";
 
 export const TodoCreate = () => {
   const [open, setOpen] = useState(false);
   const [todoText, setTodoText] = useState("");
-  const { selectedUser } = useUserStore();
+  const [selectedUserId, setSelectedUserId] = useState<string>("");
+  const { addTodo } = useTodoStore();
   const { mutate: createTodo, isLoading } = useCreateTodo();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!selectedUser) {
-      toast.error("Please select a user first");
+    if (!selectedUserId) {
+      toast.error("Please select a user");
       return;
     }
 
@@ -47,13 +49,15 @@ export const TodoCreate = () => {
     const newTodo: Omit<TodoDTO, "id"> = {
       todo: todoText.trim(),
       completed: false,
-      userId: selectedUser.id,
+      userId: parseInt(selectedUserId),
     };
 
     createTodo(newTodo, {
-      onSuccess: () => {
+      onSuccess: (createdTodo) => {
+        addTodo(createdTodo);
         toast.success("Todo created successfully");
         setTodoText("");
+        setSelectedUserId("");
         setOpen(false);
       },
       onError: () => {
@@ -70,11 +74,21 @@ export const TodoCreate = () => {
           Add Todo
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Create New Todo</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="user">Assign To</Label>
+            <UserSelectField
+              value={selectedUserId}
+              onValueChange={setSelectedUserId}
+              className="w-full"
+              hideAllOption
+            />
+          </div>
+
           <div className="space-y-2">
             <Label htmlFor="todo">Todo</Label>
             <Input
@@ -83,16 +97,22 @@ export const TodoCreate = () => {
               onChange={(e) => setTodoText(e.target.value)}
               placeholder="Enter your todo..."
               disabled={isLoading}
+              className="w-full"
             />
           </div>
-          <Button type="submit" disabled={isLoading || !selectedUser}>
+
+          <Button 
+            type="submit" 
+            disabled={isLoading || !selectedUserId} 
+            className="w-full"
+          >
             {isLoading ? (
               <>
                 <Spinner size="sm" className="mr-2" />
                 Creating...
               </>
             ) : (
-              "Create Todo"
+              'Create Todo'
             )}
           </Button>
         </form>

@@ -14,14 +14,21 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
+import { cn } from "@/lib/utils";
 
-// Stores
-import { useUserStore } from "@/lib/stores/user.store";
+interface UserSelectFieldProps {
+  value?: string;
+  onValueChange: (value: string) => void;
+  className?: string;
+  hideAllOption?: boolean;
+}
 
-const ITEMS_PER_PAGE = 10;
-
-export const UserSelect = () => {
-  const { users, setUsers, selectedUser, setSelectedUser } = useUserStore();
+export const UserSelectField = ({ 
+  value, 
+  onValueChange, 
+  className,
+  hideAllOption = false 
+}: UserSelectFieldProps) => {
   const { ref, inView } = useInView();
   
   const { 
@@ -30,19 +37,7 @@ export const UserSelect = () => {
     isFetchingNextPage, 
     hasNextPage, 
     fetchNextPage 
-  } = useUsers(ITEMS_PER_PAGE);
-
-  useEffect(() => {
-    if (data?.pages) {
-      const allUsers = data.pages.flatMap(page => page.users);
-      setUsers({
-        users: allUsers,
-        total: data.pages[0].total,
-        skip: allUsers.length,
-        limit: ITEMS_PER_PAGE
-      });
-    }
-  }, [data, setUsers]);
+  } = useUsers(10);
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
@@ -50,9 +45,11 @@ export const UserSelect = () => {
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
+  const users = data?.pages.flatMap(page => page.users) ?? [];
+
   if (isLoading) {
     return (
-      <div className="w-[200px] h-10 flex items-center justify-center rounded-md border border-input bg-background">
+      <div className="w-full h-10 flex items-center justify-center rounded-md border border-input bg-background">
         <Spinner size="sm" />
       </div>
     );
@@ -60,21 +57,16 @@ export const UserSelect = () => {
 
   return (
     <Select
-      value={selectedUser?.id?.toString() || "all"}
-      onValueChange={(value) => {
-        if (value === "all") {
-          setSelectedUser(null);
-          return;
-        }
-        const user = users.find((u) => u.id.toString() === value);
-        setSelectedUser(user || null);
-      }}
+      value={value}
+      onValueChange={onValueChange}
     >
-      <SelectTrigger className="w-[200px]">
+      <SelectTrigger className={cn("w-full", className)}>
         <SelectValue placeholder="Select a user" />
       </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="all">All Users</SelectItem>
+      <SelectContent className="w-full min-w-[200px]">
+        {!hideAllOption && (
+          <SelectItem value="all">All Users</SelectItem>
+        )}
         {users.map((user) => (
           <SelectItem key={user.id} value={user.id.toString()}>
             {user.firstName} {user.lastName}

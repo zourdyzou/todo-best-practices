@@ -11,12 +11,12 @@ import { TodoItem } from "../TodoItem/TodoItem";
 // Stores
 import { useTodoStore } from "@/lib/stores/todo.store";
 import { useUIStore } from "@/lib/stores/ui.store";
-import { useUserStore } from "@/lib/stores/user.store";
+import { useFilterStore } from "@/lib/stores/filter.store";
 
 export const TodoList = () => {
   const { todos, setTodos, currentPage, itemsPerPage } = useTodoStore();
   const { searchQuery } = useUIStore();
-  const { selectedUser } = useUserStore();
+  const { selectedUserId } = useFilterStore();
 
   const { data, isLoading } = useTodos(
     (currentPage - 1) * itemsPerPage, // skip
@@ -33,7 +33,7 @@ export const TodoList = () => {
     const matchesSearch = todo.todo
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
-    const matchesUser = selectedUser ? todo.userId === selectedUser.id : true;
+    const matchesUser = selectedUserId ? todo.userId === selectedUserId : true;
     return matchesSearch && matchesUser;
   });
 
