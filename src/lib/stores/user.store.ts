@@ -8,7 +8,11 @@ interface UserState {
 }
 
 interface UserActions {
-  setUsers: (usersResponse: UsersResponseDTO) => void;
+  setUsers: (
+    usersResponse:
+      | UsersResponseDTO
+      | ((prev: UsersResponseDTO) => UsersResponseDTO),
+  ) => void;
   setSelectedUser: (user: UserDTO | null) => void;
 }
 

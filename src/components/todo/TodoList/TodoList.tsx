@@ -20,7 +20,7 @@ export const TodoList = () => {
 
   const { data, isLoading } = useTodos(
     (currentPage - 1) * itemsPerPage, // skip
-    itemsPerPage // limit
+    itemsPerPage, // limit
   );
 
   useEffect(() => {
@@ -30,7 +30,9 @@ export const TodoList = () => {
   }, [data, setTodos]);
 
   const filteredTodos = todos.filter((todo) => {
-    const matchesSearch = todo.todo.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = todo.todo
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
     const matchesUser = selectedUser ? todo.userId === selectedUser.id : true;
     return matchesSearch && matchesUser;
   });

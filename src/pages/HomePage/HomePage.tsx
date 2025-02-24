@@ -12,7 +12,7 @@ export default function HomePage() {
         <h1 className="text-3xl font-bold">Todo List</h1>
         <TodoCreate />
       </div>
-      
+
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex-1">
           <TodoSearch />

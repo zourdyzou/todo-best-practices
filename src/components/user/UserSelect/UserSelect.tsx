@@ -1,9 +1,9 @@
 // External imports
-import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { useInView } from "react-intersection-observer";
 
-// API
-import { getUsers } from "@/api/requests/get";
+// API hooks
+import { useUsers } from "@/api/apiHooks/useUsers";
 
 // Components
 import {
@@ -13,7 +13,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 
 // Stores
@@ -23,37 +22,41 @@ const ITEMS_PER_PAGE = 10;
 
 export const UserSelect = () => {
   const { users, setUsers, selectedUser, setSelectedUser } = useUserStore();
-  const [skip, setSkip] = useState(0);
+  const { ref, inView } = useInView();
   
-  const { data, isLoading, isFetching } = useQuery({
-    queryKey: ['users', skip],
-    queryFn: () => getUsers(skip, ITEMS_PER_PAGE),
-  });
+  const { 
+    data, 
+    isLoading, 
+    isFetchingNextPage, 
+    hasNextPage, 
+    fetchNextPage 
+  } = useUsers(ITEMS_PER_PAGE);
 
   useEffect(() => {
-    if (data) {
+    if (data?.pages) {
+      const allUsers = data.pages.flatMap(page => page.users);
       setUsers({
-        users: [...users, ...data.users],
-        total: data.total,
-        skip,
+        users: allUsers,
+        total: data.pages[0].total,
+        skip: allUsers.length,
         limit: ITEMS_PER_PAGE
       });
     }
-  }, [data]);
+  }, [data, setUsers]);
 
-  const handleLoadMore = () => {
-    setSkip(prev => prev + ITEMS_PER_PAGE);
-  };
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  if (isLoading && users.length === 0) {
+  if (isLoading) {
     return (
       <div className="w-[200px] h-10 flex items-center justify-center rounded-md border border-input bg-background">
         <Spinner size="sm" />
       </div>
     );
   }
-
-  const hasMore = users.length < (data?.total ?? 0);
 
   return (
     <Select
@@ -78,21 +81,18 @@ export const UserSelect = () => {
           </SelectItem>
         ))}
         
-        {hasMore && (
-          <div className="p-2 flex justify-center border-t">
-            <Button 
-              variant="ghost" 
-              size="sm"
-              onClick={handleLoadMore}
-              disabled={isFetching}
-              className="w-full"
-            >
-              {isFetching ? (
-                <Spinner size="sm" />
-              ) : (
-                'Load More'
-              )}
-            </Button>
+        {hasNextPage && (
+          <div 
+            ref={ref}
+            className="p-2 flex justify-center border-t"
+          >
+            {isFetchingNextPage ? (
+              <Spinner size="sm" />
+            ) : (
+              <span className="text-sm text-muted-foreground">
+                Scroll for more...
+              </span>
+            )}
           </div>
         )}
       </SelectContent>

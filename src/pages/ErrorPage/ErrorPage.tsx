@@ -1,10 +1,14 @@
 // External imports
-import { useRouteError, isRouteErrorResponse, useNavigate } from "react-router-dom";
+import {
+  useRouteError,
+  isRouteErrorResponse,
+  useNavigate,
+} from "react-router-dom";
 
 // Components
 import { Button } from "@/components/ui/button";
 
-export default function ErrorPage () {
+export default function ErrorPage() {
   const error = useRouteError();
   const navigate = useNavigate();
 
@@ -36,23 +40,18 @@ export default function ErrorPage () {
           <h1 className="text-4xl font-bold tracking-tight">
             Roads? Where we're going, we don't need roads!
           </h1>
-          
-          <p className="text-muted-foreground text-lg">
-            {errorMessage}
-          </p>
+
+          <p className="text-muted-foreground text-lg">{errorMessage}</p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-            <Button 
+            <Button
               onClick={() => navigate(-1)}
               variant="outline"
               className="space-x-2"
             >
               ← Go Back
             </Button>
-            <Button 
-              onClick={() => navigate('/')}
-              className="space-x-2"
-            >
+            <Button onClick={() => navigate("/")} className="space-x-2">
               Back to the Future (Home)
             </Button>
           </div>
@@ -65,4 +64,4 @@ export default function ErrorPage () {
       </div>
     </div>
   );
-};
+}
