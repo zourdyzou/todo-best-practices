@@ -7,7 +7,5 @@ describe("App component", () => {
     render(<App />);
 
     screen.debug();
-
-    // check if App components renders headline
   });
 });
