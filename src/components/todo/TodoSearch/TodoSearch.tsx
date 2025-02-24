@@ -5,7 +5,6 @@ import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
 // Stores
-import { useUIStore } from "@/lib/stores/ui.store";
 import { useFilterStore } from "@/lib/stores/filter.store";
 
 export const TodoSearch = () => {

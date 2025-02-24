@@ -1,5 +1,5 @@
 // External imports
-import { Pencil, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 // Types
@@ -14,25 +14,26 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Spinner } from "@/components/ui/spinner";
+import { TodoEdit } from "../TodoEdit/TodoEdit";
 
 // Stores
 import { useTodoStore } from "@/lib/stores/todo.store";
-import { useUIStore } from "@/lib/stores/ui.store";
 
 interface TodoItemProps {
   todo: TodoDTO;
 }
 
 export const TodoItem = ({ todo }: TodoItemProps) => {
-  const { setEditModalOpen, setSelectedTodoId } = useUIStore();
   const { updateTodo: updateTodoInStore } = useTodoStore();
-
   const { mutate: updateTodo, isLoading: isUpdating } = useUpdateTodo();
   const { mutate: deleteTodo, isLoading: isDeleting } = useDeleteTodo();
 
   const handleToggle = () => {
     updateTodo(
-      { id: todo.id, todo: { completed: !todo.completed } },
+      { 
+        id: todo.id, 
+        todo: { completed: !todo.completed } 
+      },
       {
         onSuccess: () => {
           updateTodoInStore(todo.id, { completed: !todo.completed });
@@ -56,11 +57,6 @@ export const TodoItem = ({ todo }: TodoItemProps) => {
     });
   };
 
-  const handleEdit = () => {
-    setSelectedTodoId(todo.id);
-    setEditModalOpen(true);
-  };
-
   return (
     <Card>
       <CardContent className="flex items-center justify-between p-4">
@@ -76,14 +72,7 @@ export const TodoItem = ({ todo }: TodoItemProps) => {
           {isUpdating && <Spinner size="sm" className="ml-2" />}
         </div>
         <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={handleEdit}
-            disabled={isUpdating || isDeleting}
-          >
-            <Pencil className="h-4 w-4" />
-          </Button>
+          <TodoEdit todo={todo} />
           <Button
             variant="outline"
             size="icon"

@@ -1,4 +1,3 @@
-// External imports
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
 
@@ -10,55 +9,29 @@ import { useCreateTodo } from "@/api/apiHooks/useCreateTodo";
 
 // Components
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Spinner } from "@/components/ui/spinner";
+import { TodoDialog } from "../TodoDialog/TodoDialog";
 
 // Stores
 import { useTodoStore } from "@/lib/stores/todo.store";
-import { useState } from "react";
-import { UserSelectField } from "@/components/user/UserSelectField/UserSelectField";
+import { useUIStore } from "@/lib/stores/ui.store";
 
 export const TodoCreate = () => {
-  const [open, setOpen] = useState(false);
-  const [todoText, setTodoText] = useState("");
-  const [selectedUserId, setSelectedUserId] = useState<string>("");
   const { addTodo } = useTodoStore();
+  const { isCreateModalOpen, setCreateModalOpen } = useUIStore();
   const { mutate: createTodo, isLoading } = useCreateTodo();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!selectedUserId) {
-      toast.error("Please select a user");
-      return;
-    }
-
-    if (!todoText.trim()) {
-      toast.error("Todo text cannot be empty");
-      return;
-    }
-
+  const handleSubmit = (data: { todo: string; userId: number }) => {
     const newTodo: Omit<TodoDTO, "id"> = {
-      todo: todoText.trim(),
+      todo: data.todo,
       completed: false,
-      userId: parseInt(selectedUserId),
+      userId: data.userId,
     };
 
     createTodo(newTodo, {
       onSuccess: (createdTodo) => {
         addTodo(createdTodo);
         toast.success("Todo created successfully");
-        setTodoText("");
-        setSelectedUserId("");
-        setOpen(false);
+        setCreateModalOpen(false);
       },
       onError: () => {
         toast.error("Failed to create todo");
@@ -67,56 +40,19 @@ export const TodoCreate = () => {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button>
-          <Plus className="h-4 w-4 mr-2" />
-          Add Todo
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px]">
-        <DialogHeader>
-          <DialogTitle>Create New Todo</DialogTitle>
-        </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="user">Assign To</Label>
-            <UserSelectField
-              value={selectedUserId}
-              onValueChange={setSelectedUserId}
-              className="w-full"
-              hideAllOption
-            />
-          </div>
+    <>
+      <Button onClick={() => setCreateModalOpen(true)}>
+        <Plus className="h-4 w-4 mr-2" />
+        Add Todo
+      </Button>
 
-          <div className="space-y-2">
-            <Label htmlFor="todo">Todo</Label>
-            <Input
-              id="todo"
-              value={todoText}
-              onChange={(e) => setTodoText(e.target.value)}
-              placeholder="Enter your todo..."
-              disabled={isLoading}
-              className="w-full"
-            />
-          </div>
-
-          <Button 
-            type="submit" 
-            disabled={isLoading || !selectedUserId} 
-            className="w-full"
-          >
-            {isLoading ? (
-              <>
-                <Spinner size="sm" className="mr-2" />
-                Creating...
-              </>
-            ) : (
-              'Create Todo'
-            )}
-          </Button>
-        </form>
-      </DialogContent>
-    </Dialog>
+      <TodoDialog
+        open={isCreateModalOpen}
+        onOpenChange={setCreateModalOpen}
+        onSubmit={handleSubmit}
+        isLoading={isLoading}
+        mode="create"
+      />
+    </>
   );
 };
