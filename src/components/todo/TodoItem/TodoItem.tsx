@@ -24,7 +24,7 @@ interface TodoItemProps {
 }
 
 export const TodoItem = ({ todo }: TodoItemProps) => {
-  const { updateTodo: updateTodoInStore } = useTodoStore();
+  const { updateTodo: updateTodoInStore, deleteTodo: deleteTodoInStore } = useTodoStore();
   const { mutate: updateTodo, isLoading: isUpdating } = useUpdateTodo();
   const { mutate: deleteTodo, isLoading: isDeleting } = useDeleteTodo();
 
@@ -32,11 +32,15 @@ export const TodoItem = ({ todo }: TodoItemProps) => {
     updateTodo(
       { 
         id: todo.id, 
-        todo: { completed: !todo.completed } 
+        todo: {
+          todo: todo.todo,
+          userId: todo.userId,
+          completed: !todo.completed
+        }
       },
       {
-        onSuccess: () => {
-          updateTodoInStore(todo.id, { completed: !todo.completed });
+        onSuccess: (updatedTodo) => {
+          updateTodoInStore(todo.id, updatedTodo);
           toast.success("Todo status updated");
         },
         onError: () => {
@@ -49,6 +53,7 @@ export const TodoItem = ({ todo }: TodoItemProps) => {
   const handleDelete = () => {
     deleteTodo(todo.id, {
       onSuccess: () => {
+        deleteTodoInStore(todo.id);
         toast.success("Todo deleted successfully");
       },
       onError: () => {
