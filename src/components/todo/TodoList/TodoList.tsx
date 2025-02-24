@@ -1,4 +1,3 @@
-// External imports
 import { useEffect } from "react";
 
 // API hooks
@@ -7,17 +6,16 @@ import { useTodos } from "@/api/apiHooks/useTodos";
 // Components
 import { Spinner } from "@/components/ui/spinner";
 import { TodoItem } from "../TodoItem/TodoItem";
-
-// Stores
 import { useTodoStore } from "@/lib/stores/todo.store";
 import { useFilterStore } from "@/lib/stores/filter.store";
+import { ErrorState } from "@/components/error/ErrorState/ErrorState";
 
 export const TodoList = () => {
   const { todos, setTodos, currentPage, itemsPerPage } = useTodoStore();
   const { searchQuery } = useFilterStore();
   const { selectedUserId } = useFilterStore();
 
-  const { data, isLoading } = useTodos(
+  const { data, isLoading, isError, error} = useTodos(
     (currentPage - 1) * itemsPerPage, // skip
     itemsPerPage, // limit
   );
@@ -35,6 +33,10 @@ export const TodoList = () => {
     const matchesUser = selectedUserId ? todo.userId === selectedUserId : true;
     return matchesSearch && matchesUser;
   });
+
+  if (isError) {
+    return <ErrorState description={error?.message} title="Failed to fetch todos" />;
+  }
 
   if (isLoading) {
     return (

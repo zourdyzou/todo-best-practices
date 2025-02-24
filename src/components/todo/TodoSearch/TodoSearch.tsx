@@ -13,7 +13,7 @@ export const TodoSearch = () => {
   return (
     <Input
       startIcon={
-        <Search className="h-4 w-4 text-muted-foreground" /> // Added size and color
+        <Search className="h-4 w-4 text-muted-foreground" />
       }
       placeholder="Search todos..."
       value={searchQuery}

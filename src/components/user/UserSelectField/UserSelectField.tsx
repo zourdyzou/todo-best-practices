@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
+import { ErrorState } from "@/components/error/ErrorState/ErrorState";
 
 interface UserSelectFieldProps {
   value?: string;
@@ -31,7 +32,7 @@ export const UserSelectField = ({
 }: UserSelectFieldProps) => {
   const { ref, inView } = useInView();
 
-  const { data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage } =
+  const { data, isLoading, isFetchingNextPage, isError, hasNextPage, fetchNextPage } =
     useUsers(10);
 
   useEffect(() => {
@@ -41,6 +42,23 @@ export const UserSelectField = ({
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const users = data?.pages.flatMap((page) => page.users) ?? [];
+
+  if (isError) {
+    return (
+      <div className="space-y-2">
+        <Select value={value} onValueChange={onValueChange} disabled>
+          <SelectTrigger className={cn("w-full border-destructive", className)}>
+            <SelectValue placeholder="Failed to load users" />
+          </SelectTrigger>
+        </Select>
+        <ErrorState 
+          title="Failed to load users"
+          description="Unable to load user list. Please try again later."
+          className="min-h-[100px] p-4" // Override default height/padding for inline use
+        />
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
