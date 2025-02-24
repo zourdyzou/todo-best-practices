@@ -21,13 +21,26 @@ interface TodoEditProps {
 
 export const TodoEdit = ({ todo }: TodoEditProps) => {
   const { updateTodo } = useTodoStore();
-  const { isEditModalOpen, setEditModalOpen, setSelectedTodoId } = useUIStore();
+  const { 
+    isEditModalOpen, 
+    setEditModalOpen, 
+    selectedTodoId,
+    setSelectedTodoId 
+  } = useUIStore();
+
   const { mutate: editTodo, isLoading } = useUpdateTodo();
 
   const handleOpenEdit = () => {
     setSelectedTodoId(todo.id);
     setEditModalOpen(true);
   };
+
+  const handleCloseEdit = () => {
+    setEditModalOpen(false);
+    setSelectedTodoId(null);
+  };
+
+  const isThisTodoBeingEdited = isEditModalOpen && selectedTodoId === todo.id;
 
   const handleSubmit = (data: { todo: string; userId: number }) => {
     editTodo(
@@ -43,7 +56,7 @@ export const TodoEdit = ({ todo }: TodoEditProps) => {
         onSuccess: (updatedTodo) => {
           updateTodo(todo.id, updatedTodo);
           toast.success("Todo updated successfully");
-          setEditModalOpen(false);
+          handleCloseEdit();
         },
         onError: () => {
           toast.error("Failed to update todo");
@@ -59,8 +72,10 @@ export const TodoEdit = ({ todo }: TodoEditProps) => {
       </Button>
 
       <TodoDialog
-        open={isEditModalOpen}
-        onOpenChange={setEditModalOpen}
+        open={isThisTodoBeingEdited}
+        onOpenChange={(open) => {
+          if (!open) handleCloseEdit();
+        }}
         onSubmit={handleSubmit}
         isLoading={isLoading}
         mode="edit"
