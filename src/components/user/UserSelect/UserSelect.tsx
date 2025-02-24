@@ -1,3 +1,10 @@
+// External imports
+import { useEffect } from "react";
+
+// API hooks
+import { useUsers } from "@/api/apiHooks/useUsers";
+
+// Components
 import {
   Select,
   SelectContent,
@@ -6,9 +13,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
+
+// Stores
 import { useUserStore } from "@/lib/stores/user.store";
-import { useUsers } from "@/api/apiHooks/useUsers";
-import { useEffect } from "react";
 
 export const UserSelect = () => {
   const { users, setUsers, selectedUser, setSelectedUser } = useUserStore();

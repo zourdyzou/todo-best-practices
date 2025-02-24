@@ -1,14 +1,23 @@
+// External imports
+import { Pencil, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+
+// Types
 import { TodoDTO } from "@/api/requests/types/todo.types";
+
+// API hooks
+import { useDeleteTodo } from "@/api/apiHooks/useDeleteTodo";
+import { useUpdateTodo } from "@/api/apiHooks/useUpdateTodo";
+
+// Components
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
-import { Pencil, Trash2 } from "lucide-react";
-import { useUpdateTodo } from "@/api/apiHooks/useUpdateTodo";
-import { useDeleteTodo } from "@/api/apiHooks/useDeleteTodo";
-import { toast } from "sonner";
-import { useUIStore } from "@/lib/stores/ui.store";
-import { useTodoStore } from "@/lib/stores/todo.store";
 import { Spinner } from "@/components/ui/spinner";
+
+// Stores
+import { useTodoStore } from "@/lib/stores/todo.store";
+import { useUIStore } from "@/lib/stores/ui.store";
 
 interface TodoItemProps {
   todo: TodoDTO;

@@ -1,5 +1,10 @@
+// External imports
 import { Search } from "lucide-react";
+
+// Components
 import { Input } from "@/components/ui/input";
+
+// Stores
 import { useUIStore } from "@/lib/stores/ui.store";
 
 export const TodoSearch = () => {

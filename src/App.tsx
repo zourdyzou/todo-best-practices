@@ -1,5 +1,6 @@
 import { HomePage } from "@/pages/HomePage/HomePage";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { Toaster } from '@/components/ui/toaster';
 
 const router = createBrowserRouter([
   {
@@ -9,4 +10,9 @@ const router = createBrowserRouter([
   },
 ]);
 
-export const App = () => <RouterProvider router={router} />;
+export const App = () => (
+  <>
+    <RouterProvider router={router} />
+    <Toaster />
+  </>
+);
