@@ -39,13 +39,6 @@ export const TodoDialog = ({
     defaultValues.userId?.toString() ?? "",
   );
 
-  useEffect(() => {
-    if (!open) {
-      setTodoText("");
-      setSelectedUserId("");
-    }
-  }, [open]);
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -63,6 +56,9 @@ export const TodoDialog = ({
       todo: todoText.trim(),
       userId: parseInt(selectedUserId),
     });
+
+    setTodoText("");
+    setSelectedUserId("");
   };
 
   return (
