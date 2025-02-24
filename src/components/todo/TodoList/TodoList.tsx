@@ -10,12 +10,11 @@ import { TodoItem } from "../TodoItem/TodoItem";
 
 // Stores
 import { useTodoStore } from "@/lib/stores/todo.store";
-import { useUIStore } from "@/lib/stores/ui.store";
 import { useFilterStore } from "@/lib/stores/filter.store";
 
 export const TodoList = () => {
   const { todos, setTodos, currentPage, itemsPerPage } = useTodoStore();
-  const { searchQuery } = useUIStore();
+  const { searchQuery } = useFilterStore();
   const { selectedUserId } = useFilterStore();
 
   const { data, isLoading } = useTodos(

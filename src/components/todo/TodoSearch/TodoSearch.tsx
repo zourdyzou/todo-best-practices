@@ -6,9 +6,10 @@ import { Input } from "@/components/ui/input";
 
 // Stores
 import { useUIStore } from "@/lib/stores/ui.store";
+import { useFilterStore } from "@/lib/stores/filter.store";
 
 export const TodoSearch = () => {
-  const { searchQuery, setSearchQuery } = useUIStore();
+  const { searchQuery, setSearchQuery } = useFilterStore();
 
   return (
     <Input
