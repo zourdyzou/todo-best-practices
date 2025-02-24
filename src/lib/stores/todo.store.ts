@@ -1,5 +1,5 @@
-import { create } from 'zustand';
-import { TodoDTO, TodosResponseDTO } from '../../api/requests/types/todo.types';
+import { create } from "zustand";
+import { TodoDTO, TodosResponseDTO } from "../../api/requests/types/todo.types";
 
 interface TodoState {
   todos: TodoDTO[];
@@ -25,26 +25,30 @@ export const useTodoStore = create<TodoState & TodoActions>((set) => ({
   itemsPerPage: 10,
 
   // Actions
-  setTodos: (todosResponse) => set({
-    todos: todosResponse.todos,
-    totalTodos: todosResponse.total,
-  }),
+  setTodos: (todosResponse) =>
+    set({
+      todos: todosResponse.todos,
+      totalTodos: todosResponse.total,
+    }),
 
-  addTodo: (todo) => set((state) => ({
-    todos: [...state.todos, todo],
-    totalTodos: state.totalTodos + 1,
-  })),
+  addTodo: (todo) =>
+    set((state) => ({
+      todos: [...state.todos, todo],
+      totalTodos: state.totalTodos + 1,
+    })),
 
-  updateTodo: (id, updatedTodo) => set((state) => ({
-    todos: state.todos.map((todo) =>
-      todo.id === id ? { ...todo, ...updatedTodo } : todo
-    ),
-  })),
+  updateTodo: (id, updatedTodo) =>
+    set((state) => ({
+      todos: state.todos.map((todo) =>
+        todo.id === id ? { ...todo, ...updatedTodo } : todo,
+      ),
+    })),
 
-  deleteTodo: (id) => set((state) => ({
-    todos: state.todos.filter((todo) => todo.id !== id),
-    totalTodos: state.totalTodos - 1,
-  })),
+  deleteTodo: (id) =>
+    set((state) => ({
+      todos: state.todos.filter((todo) => todo.id !== id),
+      totalTodos: state.totalTodos - 1,
+    })),
 
   setCurrentPage: (page) => set({ currentPage: page }),
   setItemsPerPage: (items) => set({ itemsPerPage: items }),

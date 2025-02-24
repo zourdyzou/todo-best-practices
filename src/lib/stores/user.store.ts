@@ -1,5 +1,5 @@
-import { create } from 'zustand';
-import { UserDTO, UsersResponseDTO } from '../../api/requests/types/user.types';
+import { create } from "zustand";
+import { UserDTO, UsersResponseDTO } from "../../api/requests/types/user.types";
 
 interface UserState {
   users: UserDTO[];
@@ -19,9 +19,10 @@ export const useUserStore = create<UserState & UserActions>((set) => ({
   selectedUser: null,
 
   // Actions
-  setUsers: (usersResponse) => set({
-    users: usersResponse.users,
-    totalUsers: usersResponse.total,
-  }),
+  setUsers: (usersResponse) =>
+    set({
+      users: usersResponse.users,
+      totalUsers: usersResponse.total,
+    }),
   setSelectedUser: (user) => set({ selectedUser: user }),
 }));

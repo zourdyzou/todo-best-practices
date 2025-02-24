@@ -5,7 +5,7 @@ import { UserDTO } from "../requests/types/user.types";
 export const useUpdateUser = () => {
   const { mutate, isPending, isError, isSuccess } = useMutation({
     mutationKey: ["updateUser"],
-    mutationFn: ({ id, user }: { id: number; user: Partial<UserDTO> }) => 
+    mutationFn: ({ id, user }: { id: number; user: Partial<UserDTO> }) =>
       updateUser(id, user),
   });
 

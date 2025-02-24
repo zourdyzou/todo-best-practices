@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
 interface UIState {
   searchQuery: string;
@@ -16,7 +16,7 @@ interface UIActions {
 
 export const useUIStore = create<UIState & UIActions>((set) => ({
   // Initial State
-  searchQuery: '',
+  searchQuery: "",
   isCreateModalOpen: false,
   isEditModalOpen: false,
   selectedTodoId: null,
