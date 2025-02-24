@@ -28,7 +28,7 @@ export const TodoEdit = ({ todo }: TodoEditProps) => {
     setSelectedTodoId 
   } = useUIStore();
 
-  const { mutate: editTodo, isLoading } = useUpdateTodo();
+  const { mutate: editTodo, isPending: isLoading } = useUpdateTodo();
 
   const handleOpenEdit = () => {
     setSelectedTodoId(todo.id);

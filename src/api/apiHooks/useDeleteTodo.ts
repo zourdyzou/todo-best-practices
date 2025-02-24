@@ -1,11 +1,18 @@
 import { useMutation } from "@tanstack/react-query";
 import { deleteTodo } from "../requests/delete";
+import { useTodoStore } from "@/lib/stores/todo.store";
 
 export const useDeleteTodo = () => {
-  const { mutate, isPending, isError, isSuccess } = useMutation({
-    mutationKey: ["deleteTodo"],
-    mutationFn: (id: number) => deleteTodo(id),
-  });
+  const isLocalTodo = useTodoStore((state) => state.isLocalTodo);
 
-  return { mutate, isLoading: isPending, isError, isSuccess };
+  return useMutation({
+    mutationFn: async (id: number) => {
+      // If it's a local todo, just return success
+      if (isLocalTodo(id)) {
+        return true;
+      }
+      // Otherwise, try the real API
+      return deleteTodo(id);
+    }
+  });
 };

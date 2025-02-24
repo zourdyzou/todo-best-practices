@@ -25,8 +25,8 @@ interface TodoItemProps {
 
 export const TodoItem = ({ todo }: TodoItemProps) => {
   const { updateTodo: updateTodoInStore, deleteTodo: deleteTodoInStore } = useTodoStore();
-  const { mutate: updateTodo, isLoading: isUpdating } = useUpdateTodo();
-  const { mutate: deleteTodo, isLoading: isDeleting } = useDeleteTodo();
+  const { mutate: updateTodo, isPending: isUpdating } = useUpdateTodo();
+  const { mutate: deleteTodo, isPending: isDeleting } = useDeleteTodo();
 
   const handleToggle = () => {
     updateTodo(
