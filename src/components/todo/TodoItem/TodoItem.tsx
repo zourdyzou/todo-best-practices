@@ -3,9 +3,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Pencil, Trash2 } from "lucide-react";
-import { useUpdateTodo } from "@/api/apiHooks/useTodos/useUpdateTodo";
-import { useDeleteTodo } from "@/api/apiHooks/useTodos/useDeleteTodo";
-import { useToast } from "@/components/ui/use-toast";
+import { useUpdateTodo } from "@/api/apiHooks/useUpdateTodo";
+import { useDeleteTodo } from "@/api/apiHooks/useDeleteTodo";
+import { toast } from "sonner";
 import { useUIStore } from "@/lib/stores/ui.store";
 import { useTodoStore } from "@/lib/stores/todo.store";
 import { Spinner } from "@/components/ui/spinner";
@@ -15,10 +15,9 @@ interface TodoItemProps {
 }
 
 export const TodoItem = ({ todo }: TodoItemProps) => {
-  const { toast } = useToast();
   const { setEditModalOpen, setSelectedTodoId } = useUIStore();
   const { updateTodo: updateTodoInStore } = useTodoStore();
-  
+
   const { mutate: updateTodo, isLoading: isUpdating } = useUpdateTodo();
   const { mutate: deleteTodo, isLoading: isDeleting } = useDeleteTodo();
 
@@ -28,36 +27,22 @@ export const TodoItem = ({ todo }: TodoItemProps) => {
       {
         onSuccess: () => {
           updateTodoInStore(todo.id, { completed: !todo.completed });
-          toast({
-            title: "Success",
-            description: "Todo status updated",
-          });
+          toast.success("Todo status updated");
         },
         onError: () => {
-          toast({
-            title: "Error",
-            description: "Failed to update todo",
-            variant: "destructive",
-          });
+          toast.error("Failed to update todo");
         },
-      }
+      },
     );
   };
 
   const handleDelete = () => {
     deleteTodo(todo.id, {
       onSuccess: () => {
-        toast({
-          title: "Success",
-          description: "Todo deleted successfully",
-        });
+        toast.success("Todo deleted successfully");
       },
       onError: () => {
-        toast({
-          title: "Error",
-          description: "Failed to delete todo",
-          variant: "destructive",
-        });
+        toast.error("Failed to delete todo");
       },
     });
   };
@@ -71,8 +56,8 @@ export const TodoItem = ({ todo }: TodoItemProps) => {
     <Card>
       <CardContent className="flex items-center justify-between p-4">
         <div className="flex items-center gap-3">
-          <Checkbox 
-            checked={todo.completed} 
+          <Checkbox
+            checked={todo.completed}
             onCheckedChange={handleToggle}
             disabled={isUpdating}
           />
@@ -82,21 +67,25 @@ export const TodoItem = ({ todo }: TodoItemProps) => {
           {isUpdating && <Spinner size="sm" className="ml-2" />}
         </div>
         <div className="flex gap-2">
-          <Button 
-            variant="outline" 
-            size="icon" 
+          <Button
+            variant="outline"
+            size="icon"
             onClick={handleEdit}
             disabled={isUpdating || isDeleting}
           >
             <Pencil className="h-4 w-4" />
           </Button>
-          <Button 
-            variant="outline" 
-            size="icon" 
+          <Button
+            variant="outline"
+            size="icon"
             onClick={handleDelete}
             disabled={isDeleting || isUpdating}
           >
-            {isDeleting ? <Spinner size="sm" /> : <Trash2 className="h-4 w-4" />}
+            {isDeleting ? (
+              <Spinner size="sm" />
+            ) : (
+              <Trash2 className="h-4 w-4" />
+            )}
           </Button>
         </div>
       </CardContent>
