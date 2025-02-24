@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 
 // Components
@@ -38,6 +38,14 @@ export const TodoDialog = ({
   const [selectedUserId, setSelectedUserId] = useState<string>(
     defaultValues.userId?.toString() ?? "",
   );
+
+  // Reset form when dialog opens/closes
+  useEffect(() => {
+    if (!open) {
+      setTodoText("");
+      setSelectedUserId("");
+    }
+  }, [open]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
