@@ -1,6 +1,6 @@
 # Single Page Application Template
 
-This is a template for SPA applications developed in our company.
+This is a template for SPA applications developed by Zourdy and Mateusz.
 
 ## How to scaffold a project with this template?
 
@@ -15,7 +15,7 @@ cd my-project
 3. Transplant contents to your folder:
 
 ```
-degit --mode=git https://github.com/Bereyziat-Development/bdev-react-spa
+degit --mode=git https://github.com/zourdyzou/react-spa-template
 ```
 
 4. Create `.env` as per exaple file
