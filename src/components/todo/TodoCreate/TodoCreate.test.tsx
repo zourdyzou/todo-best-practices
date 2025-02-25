@@ -110,7 +110,7 @@ describe("TodoCreate", () => {
     await user.click(screen.getByRole("button", { name: /add todo/i }));
     
     const onSubmit = mockDisplayTodoDialog.mock.calls[0][0].onSubmit;
-    mockCreateTodo.mockImplementation((todo, options) => {
+    mockCreateTodo.mockImplementation((_, options) => {
       options.onError(new Error("Failed to create todo"));
     });
 
