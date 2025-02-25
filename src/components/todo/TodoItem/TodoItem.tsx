@@ -70,23 +70,26 @@ export const TodoItem = ({ todo }: TodoItemProps) => {
           <Checkbox
             checked={todo.completed}
             onCheckedChange={handleToggle}
-            disabled={isUpdating}
+            disabled={isUpdating || isDeleting}
           />
           <span className={todo.completed ? "line-through text-gray-500" : ""}>
             {todo.todo}
           </span>
-          {isUpdating && <Spinner size="sm" className="ml-2" />}
+          {isUpdating && (
+            <Spinner size="sm" className="ml-2" data-testid="update-spinner" />
+          )}
         </div>
         <div className="flex gap-2">
           <TodoEdit todo={todo} />
           <Button
-            variant="outline"
+            variant="ghost"
             size="icon"
             onClick={handleDelete}
             disabled={isDeleting || isUpdating}
+            data-testid="delete-button"
           >
             {isDeleting ? (
-              <Spinner size="sm" />
+              <Spinner size="sm" data-testid="delete-spinner" />
             ) : (
               <Trash2 className="h-4 w-4" />
             )}
