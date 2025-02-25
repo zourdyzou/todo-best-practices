@@ -15,6 +15,7 @@ const sizeClasses = {
 export const Spinner = ({ size = "md", className }: SpinnerProps) => {
   return (
     <Loader2
+      data-testid="spinner"
       className={cn(
         "animate-spin text-muted-foreground",
         sizeClasses[size],
