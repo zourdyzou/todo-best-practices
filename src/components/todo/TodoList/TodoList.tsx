@@ -15,7 +15,7 @@ export const TodoList = () => {
   const { searchQuery } = useFilterStore();
   const { selectedUserId } = useFilterStore();
 
-  const { data, isLoading, isError, error} = useTodos(
+  const { data, isLoading, isError, error } = useTodos(
     (currentPage - 1) * itemsPerPage, // skip
     itemsPerPage, // limit
   );
@@ -35,7 +35,9 @@ export const TodoList = () => {
   });
 
   if (isError) {
-    return <ErrorState description={error?.message} title="Failed to fetch todos" />;
+    return (
+      <ErrorState description={error?.message} title="Failed to fetch todos" />
+    );
   }
 
   if (isLoading) {

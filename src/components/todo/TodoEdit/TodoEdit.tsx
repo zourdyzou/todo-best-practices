@@ -1,19 +1,10 @@
 import { toast } from "sonner";
 import { Pencil } from "lucide-react";
-
-// Types
-import { TodoDTO } from "@/api/requests/types/todo.types";
-
-// API hooks
-import { useUpdateTodo } from "@/api/apiHooks/useUpdateTodo";
-
-// Components
 import { Button } from "@/components/ui/button";
-import { TodoDialog } from "../TodoDialog/TodoDialog";
-
-// Stores
+import { useTodoDialog } from "@/context/TodoDialogContext";
+import { useUpdateTodo } from "@/api/apiHooks/useUpdateTodo";
 import { useTodoStore } from "@/lib/stores/todo.store";
-import { useUIStore } from "@/lib/stores/ui.store";
+import { TodoDTO } from "@/api/requests/types/todo.types";
 
 interface TodoEditProps {
   todo: TodoDTO;
@@ -21,69 +12,44 @@ interface TodoEditProps {
 
 export const TodoEdit = ({ todo }: TodoEditProps) => {
   const { updateTodo } = useTodoStore();
-  const {
-    isEditModalOpen,
-    setEditModalOpen,
-    selectedTodoId,
-    setSelectedTodoId,
-  } = useUIStore();
-
+  const displayTodoDialog = useTodoDialog();
   const { mutate: editTodo, isPending: isLoading } = useUpdateTodo();
 
-  const handleOpenEdit = () => {
-    setSelectedTodoId(todo.id);
-    setEditModalOpen(true);
-  };
-
-  const handleCloseEdit = () => {
-    setEditModalOpen(false);
-    setSelectedTodoId(null);
-  };
-
-  const isThisTodoBeingEdited = isEditModalOpen && selectedTodoId === todo.id;
-
-  const handleSubmit = (data: { todo: string; userId: number }) => {
-    editTodo(
-      {
-        id: todo.id,
-        todo: {
-          todo: data.todo,
-          userId: data.userId,
-          completed: todo.completed,
-        },
+  const handleEdit = () => {
+    displayTodoDialog({
+      mode: "edit",
+      defaultValues: {
+        todo: todo.todo,
+        userId: todo.userId.toString(),
       },
-      {
-        onSuccess: (updatedTodo) => {
-          updateTodo(todo.id, updatedTodo);
-          toast.success("Todo updated successfully");
-          handleCloseEdit();
-        },
-        onError: () => {
-          toast.error("Failed to update todo");
-        },
+      isLoading,
+      onSubmit: (data: { todo: string; userId: number }) => {
+        editTodo(
+          {
+            id: todo.id,
+            todo: {
+              todo: data.todo,
+              userId: data.userId,
+              completed: todo.completed,
+            },
+          },
+          {
+            onSuccess: (updatedTodo) => {
+              updateTodo(todo.id, updatedTodo);
+              toast.success("Todo updated successfully");
+            },
+            onError: () => {
+              toast.error("Failed to update todo");
+            },
+          },
+        );
       },
-    );
+    });
   };
 
   return (
-    <>
-      <Button variant="ghost" size="icon" onClick={handleOpenEdit}>
-        <Pencil className="h-4 w-4" />
-      </Button>
-
-      <TodoDialog
-        open={isThisTodoBeingEdited}
-        onOpenChange={(open) => {
-          if (!open) handleCloseEdit();
-        }}
-        onSubmit={handleSubmit}
-        isLoading={isLoading}
-        mode="edit"
-        defaultValues={{
-          todo: todo.todo,
-          userId: todo.userId,
-        }}
-      />
-    </>
+    <Button variant="ghost" size="icon" onClick={handleEdit}>
+      <Pencil className="h-4 w-4" />
+    </Button>
   );
 };

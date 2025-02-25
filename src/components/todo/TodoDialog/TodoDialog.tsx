@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 
 // Components
@@ -14,16 +14,18 @@ import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { UserSelectField } from "@/components/user/UserSelectField/UserSelectField";
 
+interface FormValues {
+  todo: string;
+  userId: string;
+}
+
 interface TodoDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit: (data: { todo: string; userId: number }) => void;
   isLoading: boolean;
   mode: "create" | "edit";
-  defaultValues?: {
-    todo?: string;
-    userId?: number;
-  };
+  defaultValues?: FormValues;
 }
 
 export const TodoDialog = ({
@@ -32,33 +34,44 @@ export const TodoDialog = ({
   onSubmit,
   isLoading,
   mode,
-  defaultValues = {},
+  defaultValues = { todo: "", userId: "" },
 }: TodoDialogProps) => {
-  const [todoText, setTodoText] = useState(defaultValues.todo ?? "");
-  const [selectedUserId, setSelectedUserId] = useState<string>(
-    defaultValues.userId?.toString() ?? "",
-  );
+  const [formState, setFormState] = useState<FormValues>({
+    todo: defaultValues.todo,
+    userId: defaultValues.userId,
+  });
+
+  useEffect(() => {
+    if (mode === "edit" && defaultValues.todo) {
+      setFormState({
+        todo: defaultValues.todo,
+        userId: defaultValues.userId,
+      });
+    }
+  }, [defaultValues, mode]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!selectedUserId) {
+    if (!formState.userId) {
       toast.error("Please select a user");
       return;
     }
 
-    if (!todoText.trim()) {
+    if (!formState.todo?.trim()) {
       toast.error("Todo text cannot be empty");
       return;
     }
 
     onSubmit({
-      todo: todoText.trim(),
-      userId: parseInt(selectedUserId),
+      todo: formState.todo.trim(),
+      userId: parseInt(formState.userId),
     });
 
-    setTodoText("");
-    setSelectedUserId("");
+    setFormState({
+      todo: "",
+      userId: "",
+    });
   };
 
   return (
@@ -73,8 +86,10 @@ export const TodoDialog = ({
           <div className="space-y-2">
             <Label htmlFor="user">Assign To</Label>
             <UserSelectField
-              value={selectedUserId}
-              onValueChange={setSelectedUserId}
+              value={formState.userId}
+              onValueChange={(value) =>
+                setFormState((prev) => ({ ...prev, userId: value }))
+              }
               className="w-full"
               hideAllOption
             />
@@ -84,19 +99,17 @@ export const TodoDialog = ({
             <Label htmlFor="todo">Todo</Label>
             <Input
               id="todo"
-              value={todoText}
-              onChange={(e) => setTodoText(e.target.value)}
+              value={formState.todo}
+              onChange={(e) =>
+                setFormState((prev) => ({ ...prev, todo: e.target.value }))
+              }
               placeholder="Enter your todo..."
               disabled={isLoading}
               className="w-full"
             />
           </div>
 
-          <Button
-            type="submit"
-            disabled={isLoading || !selectedUserId}
-            className="w-full"
-          >
+          <Button type="submit" disabled={isLoading} className="w-full">
             {isLoading ? (
               <>
                 <Spinner size="sm" className="mr-2" />

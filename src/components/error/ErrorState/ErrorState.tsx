@@ -16,12 +16,14 @@ export const ErrorState = ({
     <div
       className={cn(
         "flex flex-col items-center justify-center gap-4 min-h-[400px] rounded-lg border border-destructive border-dashed p-8",
-        className
+        className,
       )}
     >
       <div className="flex items-center gap-2 text-destructive">
         <AlertCircle className="h-5 w-5" />
-        <p className="text-lg font-medium">{title}</p>
+        <p data-testid="error-title" className="text-lg font-medium">
+          {title}
+        </p>
       </div>
       <p className="text-sm text-muted-foreground text-center">{description}</p>
     </div>
