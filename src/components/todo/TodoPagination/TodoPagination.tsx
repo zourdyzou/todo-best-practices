@@ -22,6 +22,7 @@ export const TodoPagination = () => {
         size="sm"
         onClick={() => setCurrentPage(currentPage - 1)}
         disabled={!canGoPrevious}
+        aria-label="Go to previous page"
       >
         <ChevronLeft className="h-4 w-4" />
       </Button>
@@ -38,6 +39,7 @@ export const TodoPagination = () => {
         size="sm"
         onClick={() => setCurrentPage(currentPage + 1)}
         disabled={!canGoNext}
+        aria-label="Go to next page"
       >
         <ChevronRight className="h-4 w-4" />
       </Button>
