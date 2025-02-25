@@ -5,10 +5,12 @@ import { ErrorState } from "./ErrorState";
 describe("ErrorState", () => {
   it("renders with default props", () => {
     render(<ErrorState />);
-    
+
     expect(screen.getByText("Failed to load data")).toBeInTheDocument();
     expect(
-      screen.getByText("There was a problem loading the data. Please try refreshing the page or try again later.")
+      screen.getByText(
+        "There was a problem loading the data. Please try refreshing the page or try again later.",
+      ),
     ).toBeInTheDocument();
   });
 
@@ -16,12 +18,7 @@ describe("ErrorState", () => {
     const customTitle = "Custom Error Title";
     const customDescription = "Custom error description";
 
-    render(
-      <ErrorState 
-        title={customTitle} 
-        description={customDescription} 
-      />
-    );
+    render(<ErrorState title={customTitle} description={customDescription} />);
 
     expect(screen.getByText(customTitle)).toBeInTheDocument();
     expect(screen.getByText(customDescription)).toBeInTheDocument();

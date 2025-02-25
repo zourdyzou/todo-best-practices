@@ -14,7 +14,6 @@ import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { UserSelectField } from "@/components/user/UserSelectField/UserSelectField";
 
-
 interface FormValues {
   todo: string;
   userId: string;
@@ -43,7 +42,7 @@ export const TodoDialog = ({
   });
 
   useEffect(() => {
-    if (mode === "edit") {
+    if (mode === "edit" && defaultValues.todo) {
       setFormState({
         todo: defaultValues.todo,
         userId: defaultValues.userId,
@@ -88,7 +87,9 @@ export const TodoDialog = ({
             <Label htmlFor="user">Assign To</Label>
             <UserSelectField
               value={formState.userId}
-              onValueChange={(value) => setFormState(prev => ({ ...prev, userId: value }))}
+              onValueChange={(value) =>
+                setFormState((prev) => ({ ...prev, userId: value }))
+              }
               className="w-full"
               hideAllOption
             />
@@ -99,18 +100,16 @@ export const TodoDialog = ({
             <Input
               id="todo"
               value={formState.todo}
-              onChange={(e) => setFormState(prev => ({ ...prev, todo: e.target.value }))}
+              onChange={(e) =>
+                setFormState((prev) => ({ ...prev, todo: e.target.value }))
+              }
               placeholder="Enter your todo..."
               disabled={isLoading}
               className="w-full"
             />
           </div>
 
-          <Button
-            type="submit"
-            disabled={isLoading}
-            className="w-full"
-          >
+          <Button type="submit" disabled={isLoading} className="w-full">
             {isLoading ? (
               <>
                 <Spinner size="sm" className="mr-2" />

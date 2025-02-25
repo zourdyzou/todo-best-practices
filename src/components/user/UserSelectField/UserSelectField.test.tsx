@@ -72,8 +72,10 @@ describe("UserSelectField", () => {
   test("renders users and allows selection", async () => {
     vi.mocked(useUsers).mockReturnValue({
       data: {
-        pages: [{ users: mockUsers, total: mockUsers.length, skip: 0, limit: 10 }],
-        pageParams: [0]
+        pages: [
+          { users: mockUsers, total: mockUsers.length, skip: 0, limit: 10 },
+        ],
+        pageParams: [0],
       },
       isLoading: false,
       isError: false,
@@ -92,8 +94,10 @@ describe("UserSelectField", () => {
   test("hides 'All Users' option when hideAllOption is true", () => {
     vi.mocked(useUsers).mockReturnValue({
       data: {
-        pages: [{ users: mockUsers, total: mockUsers.length, skip: 0, limit: 10 }],
-        pageParams: [0]
+        pages: [
+          { users: mockUsers, total: mockUsers.length, skip: 0, limit: 10 },
+        ],
+        pageParams: [0],
       },
       isLoading: false,
       isError: false,
@@ -109,8 +113,10 @@ describe("UserSelectField", () => {
   test("shows infinite scroll loader when hasNextPage is true", () => {
     vi.mocked(useUsers).mockReturnValue({
       data: {
-        pages: [{ users: mockUsers, total: mockUsers.length, skip: 0, limit: 10 }],
-        pageParams: [0]
+        pages: [
+          { users: mockUsers, total: mockUsers.length, skip: 0, limit: 10 },
+        ],
+        pageParams: [0],
       },
       isLoading: false,
       isError: false,
