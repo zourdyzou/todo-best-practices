@@ -40,7 +40,11 @@ const createTestQueryClient = () =>
 // Simplified wrapper without TodoDialogProvider
 const wrapper = ({ children }: { children: React.ReactNode }) => {
   const testQueryClient = createTestQueryClient();
-  return <QueryClientProvider client={testQueryClient}>{children}</QueryClientProvider>;
+  return (
+    <QueryClientProvider client={testQueryClient}>
+      {children}
+    </QueryClientProvider>
+  );
 };
 
 describe("TodoCreate", () => {
@@ -50,7 +54,9 @@ describe("TodoCreate", () => {
 
   it("renders create button", () => {
     render(<TodoCreate />, { wrapper });
-    expect(screen.getByRole("button", { name: /add todo/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /add todo/i }),
+    ).toBeInTheDocument();
   });
 
   it("opens todo dialog when clicked", async () => {
@@ -63,16 +69,16 @@ describe("TodoCreate", () => {
       expect.objectContaining({
         mode: "create",
         onSubmit: expect.any(Function),
-      })
+      }),
     );
   });
 
   it("handles todo creation success", async () => {
     const user = userEvent.setup();
     render(<TodoCreate />, { wrapper });
-    
+
     await user.click(screen.getByRole("button", { name: /add todo/i }));
-    
+
     const onSubmit = mockDisplayTodoDialog.mock.calls[0][0].onSubmit;
     mockCreateTodo.mockImplementation((todo, options) => {
       options.onSuccess({
@@ -92,7 +98,7 @@ describe("TodoCreate", () => {
         userId: 1,
         completed: false,
       },
-      expect.any(Object)
+      expect.any(Object),
     );
 
     expect(mockAddTodo).toHaveBeenCalledWith({
@@ -106,9 +112,9 @@ describe("TodoCreate", () => {
   it("handles todo creation error", async () => {
     const user = userEvent.setup();
     render(<TodoCreate />, { wrapper });
-    
+
     await user.click(screen.getByRole("button", { name: /add todo/i }));
-    
+
     const onSubmit = mockDisplayTodoDialog.mock.calls[0][0].onSubmit;
     mockCreateTodo.mockImplementation((_, options) => {
       options.onError(new Error("Failed to create todo"));
@@ -136,14 +142,14 @@ describe("TodoCreate", () => {
 
     const user = userEvent.setup();
     render(<TodoCreate />, { wrapper });
-    
+
     await user.click(screen.getByRole("button", { name: /add todo/i }));
 
     expect(mockDisplayTodoDialog).toHaveBeenCalledWith(
       expect.objectContaining({
         mode: "create",
         onSubmit: expect.any(Function),
-      })
+      }),
     );
   });
 });

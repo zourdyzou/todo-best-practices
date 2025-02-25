@@ -23,10 +23,10 @@ vi.mock("../../../../src/api/apiHooks/useCreateTodo", () => ({
 }));
 
 vi.mock("@/api/apiHooks/useUpdateTodo", () => ({
-    useUpdateTodo: () => ({
-      mutate: mockUpdateTodo,
-      isPending: false,
-    }),
+  useUpdateTodo: () => ({
+    mutate: mockUpdateTodo,
+    isPending: false,
+  }),
 }));
 
 vi.mock("../../../../src/lib/stores/todo.store", () => ({

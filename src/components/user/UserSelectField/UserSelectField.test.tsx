@@ -13,20 +13,45 @@ vi.mock("react-intersection-observer", () => ({
   useInView: () => ({ ref: null, inView: false }),
 }));
 
+// Define types for mocked components
+interface SelectProps {
+  children: React.ReactNode;
+  onValueChange: (value: string) => void;
+}
+
+interface SelectItemProps {
+  children: React.ReactNode;
+  value: string;
+}
+
+interface SelectTriggerProps {
+  children: React.ReactNode;
+}
+
+interface SelectValueProps {
+  placeholder: string;
+}
+
 // Mock Radix UI Select
 vi.mock("@/components/ui/select", () => ({
-  Select: ({ children, onValueChange }: any) => (
+  Select: ({ children, onValueChange }: SelectProps) => (
     <div data-testid="mock-select">
       <button onClick={() => onValueChange("1")}>Select</button>
       {children}
     </div>
   ),
-  SelectContent: ({ children }: any) => <div>{children}</div>,
-  SelectItem: ({ children, value }: any) => (
+  SelectContent: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  SelectItem: ({ children, value }: SelectItemProps) => (
     <div data-testid={`select-item-${value}`}>{children}</div>
   ),
-  SelectTrigger: ({ children }: any) => <div role="combobox">{children}</div>,
-  SelectValue: ({ placeholder }: any) => <span>{placeholder}</span>,
+  SelectTrigger: ({ children }: SelectTriggerProps) => (
+    <div role="combobox">{children}</div>
+  ),
+  SelectValue: ({ placeholder }: SelectValueProps) => (
+    <span>{placeholder}</span>
+  ),
 }));
 
 const mockUsers: UserDTO[] = [
@@ -49,6 +74,14 @@ describe("UserSelectField", () => {
       isFetchingNextPage: false,
       hasNextPage: false,
       fetchNextPage: vi.fn(),
+      error: null,
+      isPending: true,
+      isLoadingError: false,
+      isRefetchError: false,
+      isFetchNextPageError: false,
+      isFetchPreviousPageError: false,
+      isSuccess: false,
+      total: 0,
     } as any);
 
     render(<UserSelectField onValueChange={mockOnValueChange} />);
@@ -63,6 +96,14 @@ describe("UserSelectField", () => {
       isFetchingNextPage: false,
       hasNextPage: false,
       fetchNextPage: vi.fn(),
+      error: new Error("Test error"),
+      isPending: false,
+      isLoadingError: false,
+      isRefetchError: false,
+      isFetchNextPageError: false,
+      isFetchPreviousPageError: false,
+      isSuccess: false,
+      total: 0,
     } as any);
 
     render(<UserSelectField onValueChange={mockOnValueChange} />);
@@ -82,6 +123,14 @@ describe("UserSelectField", () => {
       isFetchingNextPage: false,
       hasNextPage: false,
       fetchNextPage: vi.fn(),
+      error: null,
+      isPending: false,
+      isLoadingError: false,
+      isRefetchError: false,
+      isFetchNextPageError: false,
+      isFetchPreviousPageError: false,
+      isSuccess: true,
+      total: mockUsers.length,
     } as any);
 
     const user = userEvent.setup();

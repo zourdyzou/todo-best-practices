@@ -55,7 +55,11 @@ const createTestQueryClient = () =>
 
 const wrapper = ({ children }: { children: React.ReactNode }) => {
   const testQueryClient = createTestQueryClient();
-  return <QueryClientProvider client={testQueryClient}>{children}</QueryClientProvider>;
+  return (
+    <QueryClientProvider client={testQueryClient}>
+      {children}
+    </QueryClientProvider>
+  );
 };
 
 describe("TodoItem", () => {
@@ -65,7 +69,7 @@ describe("TodoItem", () => {
 
   it("renders todo item correctly", () => {
     render(<TodoItem todo={mockTodo} />, { wrapper });
-    
+
     expect(screen.getByText("Test Todo")).toBeInTheDocument();
     expect(screen.getByRole("checkbox")).not.toBeChecked();
     expect(screen.getByTestId("edit-button")).toBeInTheDocument();
@@ -77,7 +81,7 @@ describe("TodoItem", () => {
     render(<TodoItem todo={mockTodo} />, { wrapper });
 
     await user.click(screen.getByRole("checkbox"));
-    
+
     expect(mockUpdateTodo).toHaveBeenCalled();
   });
 
@@ -92,9 +96,9 @@ describe("TodoItem", () => {
 
     const user = userEvent.setup();
     render(<TodoItem todo={mockTodo} />, { wrapper });
-    
+
     await user.click(screen.getByRole("checkbox"));
-    
+
     await vi.waitFor(() => {
       expect(mockUpdateTodoInStore).toHaveBeenCalled();
     });
@@ -107,7 +111,7 @@ describe("TodoItem", () => {
     render(<TodoItem todo={mockTodo} />, { wrapper });
 
     await user.click(screen.getByTestId("delete-button"));
-    
+
     await vi.waitFor(() => {
       expect(mockDeleteTodo).toHaveBeenCalled();
     });
@@ -123,9 +127,9 @@ describe("TodoItem", () => {
 
     const user = userEvent.setup();
     render(<TodoItem todo={mockTodo} />, { wrapper });
-    
+
     await user.click(screen.getByTestId("delete-button"));
-    
+
     await vi.waitFor(() => {
       expect(mockDeleteTodoInStore).toHaveBeenCalled();
     });
@@ -133,7 +137,7 @@ describe("TodoItem", () => {
 
   it("applies completed styling", () => {
     render(<TodoItem todo={{ ...mockTodo, completed: true }} />, { wrapper });
-    
+
     const todoText = screen.getByText("Test Todo");
     expect(todoText).toHaveClass("line-through", "text-gray-500");
   });
