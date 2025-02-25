@@ -5,6 +5,7 @@ export const mockDisplayTodoDialog = vi.fn();
 
 // API Hooks
 export const mockCreateTodo = vi.fn();
+export const mockUpdateTodo = vi.fn();
 
 // Store Hooks
 export const mockAddTodo = vi.fn();
@@ -19,6 +20,13 @@ vi.mock("../../../../src/api/apiHooks/useCreateTodo", () => ({
     mutate: mockCreateTodo,
     isPending: false,
   }),
+}));
+
+vi.mock("@/api/apiHooks/useUpdateTodo", () => ({
+    useUpdateTodo: () => ({
+      mutate: mockUpdateTodo,
+      isPending: false,
+    }),
 }));
 
 vi.mock("../../../../src/lib/stores/todo.store", () => ({
