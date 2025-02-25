@@ -60,7 +60,7 @@ export const TodoList = () => {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 min-h-[700px] max-h-[750px] overflow-y-auto">
       {filteredTodos.map((todo) => (
         <TodoItem key={todo.id} todo={todo} />
       ))}
