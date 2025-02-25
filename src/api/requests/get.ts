@@ -9,4 +9,3 @@ export const getTodos = async (skip: number = 0, limit: number = 10) =>
 // Get all users with pagination
 export const getUsers = async (skip: number = 0, limit: number = 10) =>
   (await api.get<UsersResponseDTO>(`/users?skip=${skip}&limit=${limit}`)).data;
-

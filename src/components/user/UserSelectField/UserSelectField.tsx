@@ -32,8 +32,14 @@ export const UserSelectField = ({
 }: UserSelectFieldProps) => {
   const { ref, inView } = useInView();
 
-  const { data, isLoading, isFetchingNextPage, isError, hasNextPage, fetchNextPage } =
-    useUsers(10);
+  const {
+    data,
+    isLoading,
+    isFetchingNextPage,
+    isError,
+    hasNextPage,
+    fetchNextPage,
+  } = useUsers(10);
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
@@ -51,7 +57,7 @@ export const UserSelectField = ({
             <SelectValue placeholder="Failed to load users" />
           </SelectTrigger>
         </Select>
-        <ErrorState 
+        <ErrorState
           title="Failed to load users"
           description="Unable to load user list. Please try again later."
           className="min-h-[100px] p-4" // Override default height/padding for inline use
