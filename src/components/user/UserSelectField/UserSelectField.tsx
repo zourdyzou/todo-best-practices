@@ -60,7 +60,7 @@ export const UserSelectField = ({
         <ErrorState
           title="Failed to load users"
           description="Unable to load user list. Please try again later."
-          className="min-h-[100px] p-4" // Override default height/padding for inline use
+          className="min-h-[100px] p-4"
         />
       </div>
     );
